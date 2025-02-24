@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/masterzen/winrm/soap"
+	"github.com/marslin2023/winrm-go/soap"
 
 	"github.com/jcmturner/gokrb5/v8/client"
 	"github.com/jcmturner/gokrb5/v8/config"

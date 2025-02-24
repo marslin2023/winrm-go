@@ -7,7 +7,7 @@ import (
 	"net/url"
 
 	"github.com/Azure/go-ntlmssp"
-	"github.com/masterzen/winrm/soap"
+	"github.com/marslin2023/winrm-go/soap"
 )
 
 // ClientNTLM provides a transport via NTLMv2

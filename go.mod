@@ -14,11 +14,10 @@ require (
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127
 )
 
-require github.com/masterzen/winrm v0.0.0-20240702205601-3fad6e106085
-
 require (
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
 	github.com/jcmturner/aescts/v2 v2.0.0 // indirect
