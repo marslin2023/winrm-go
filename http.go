@@ -2,6 +2,7 @@ package winrm
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"io"
 	"net"
@@ -41,6 +42,7 @@ type clientRequest struct {
 	transport http.RoundTripper
 	dial      func(network, addr string) (net.Conn, error)
 	proxyfunc func(req *http.Request) (*url.URL, error)
+	keyCheck  func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error
 }
 
 func (c *clientRequest) Transport(endpoint *Endpoint) error {
@@ -62,8 +64,9 @@ func (c *clientRequest) Transport(endpoint *Endpoint) error {
 	transport := &http.Transport{
 		Proxy: proxyfunc,
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: endpoint.Insecure,
-			ServerName:         endpoint.TLSServerName,
+			InsecureSkipVerify:    endpoint.Insecure,
+			ServerName:            endpoint.TLSServerName,
+			VerifyPeerCertificate: c.keyCheck,
 		},
 		Dial:                  dial,
 		ResponseHeaderTimeout: endpoint.Timeout,
