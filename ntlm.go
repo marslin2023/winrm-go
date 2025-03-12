@@ -15,6 +15,8 @@ type ClientNTLM struct {
 	clientRequest
 }
 
+type ClientNTLMOption func(*clientRequest)
+
 // Transport creates the wrapped NTLM transport
 func (c *ClientNTLM) Transport(endpoint *Endpoint) error {
 	if err := c.clientRequest.Transport(endpoint); err != nil {
@@ -53,4 +55,31 @@ func NewClientNTLMWithKeyCheckFunc(keyCheck func(rawCerts [][]byte, verifiedChai
 			keyCheck: keyCheck,
 		},
 	}
+}
+
+
+func WithDial(dial func(network, addr string) (net.Conn, error)) ClientNTLMOption {
+	return func(cr *clientRequest) {
+		cr.dial = dial
+	}
+}
+
+func WithProxyFunc(proxyfunc func(req *http.Request) (*url.URL, error)) ClientNTLMOption {
+	return func(cr *clientRequest) {
+		cr.proxyfunc = proxyfunc
+	}
+}
+
+func WithKeyCheckFunc(keyCheck func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error) ClientNTLMOption {
+	return func(cr *clientRequest) {
+		cr.keyCheck = keyCheck
+	}
+}
+
+func NewClientNTLM(opts ...ClientNTLMOption) *ClientNTLM {
+	cr := clientRequest{}
+	for _, opt := range opts {
+		opt(&cr)
+	}
+	return &ClientNTLM{cr}
 }
